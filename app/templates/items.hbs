@@ -18,11 +18,8 @@
       </thead>
       <tbody>
         {{#each model.results as |item|}}
-          <tr>
-            <td>{{item.title}}</td>
-            <td>{{item.type}}</td>
-            <td>{{item.owner}}</td>
-          </tr>
+          {{#results-item model=item}}
+          {{/results-item}}
         {{/each}}
       </tbody>
     </table>
