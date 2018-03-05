@@ -1,5 +1,7 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
+import config from '../config/environment';
+import coordsToExtent from '../utils/map/coords-to-extent';
 
 export default Component.extend({
   classNames: ['extents-map'],
@@ -11,7 +13,27 @@ export default Component.extend({
     this._super(...arguments);
     // create a map at this element's DOM node
     const mapService = this.get('mapService');
-    mapService.newMap(this.elementId, { basemap: 'gray' });
+    // create a map at this element's DOM node
+    mapService.newMap(this.elementId, config.APP.map.options)
+    .then(() => {
+      this.showItemsOnMap();
+    });
+  },
+
+  // whenever items change, update the map
+  didUpdateAttrs () {
+    this.showItemsOnMap();
+  },
+
+  // show new item extents on map
+  showItemsOnMap () {
+    const { symbol, popupTemplate } = config.APP.map.itemExtents;
+    const items = this.get('items');
+    const jsonGraphics = items && items.map(item => {
+      const geometry = coordsToExtent(item.extent);
+      return { geometry, symbol, attributes: item, popupTemplate };
+    });
+    this.get('mapService').refreshGraphics(jsonGraphics);
   },
 
   // destroy the map before this component is removed from the DOM
