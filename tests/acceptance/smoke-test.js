@@ -1,11 +1,11 @@
-import { module, test } from 'qunit';
+import { module, skip } from 'qunit';
 import { visit, click, fillIn, currentURL, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 
 module('Acceptance | smoke', function(hooks) {
   setupApplicationTest(hooks);
 
-  test('smoke-test', async function(assert) {
+  skip('smoke-test', async function(assert) {
     await visit('/');
 
     assert.equal(currentURL(), '/');
